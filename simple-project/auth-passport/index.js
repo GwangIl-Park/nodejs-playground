@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const path = require('path');
 const User = require('./models/users.model');
 const passport = require('passport');
+require('dotenv').config();
 
 const app = express();
 
@@ -11,7 +12,7 @@ app.use(express.urlencoded({ extended: false }));
 
 mongoose
   .connect(
-    'mongodb+srv://rkasud0:pp117611@cluster0.rpib5ho.mongodb.net/?retryWrites=true&w=majority'
+    process.env.MONGO_URL
   )
   .then(() => {
     console.log('mongo connected');
