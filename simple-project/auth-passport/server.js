@@ -74,6 +74,13 @@ app.get('/', checkAuthenticated, (req,res)=>{
   res.render('./views')
 })
 
+app.post('/logout', (req, res, next) => {
+  req.logOut((err) => {
+    if(err) return next(err);
+    res.redirect('/login')
+  })
+})
+
 app.post('/signup', async(req, res, next) => {
   const user = new User(req.body);
   try {
