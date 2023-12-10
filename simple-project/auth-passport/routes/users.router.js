@@ -2,6 +2,7 @@ const express = require('express');
 const passport = require('passport');
 const User = require('../models/users.model');
 const usersRouter = express.Router();
+const sendMail = require('../mail/mail')
 
 usersRouter.post('/login', (req, res, next) => {
   passport.authenticate("local", (err, user, info)=>{
@@ -27,6 +28,7 @@ usersRouter.post('/signup', async(req, res, next) => {
   const user = new User(req.body);
   try {
     await user.save();
+    sendMail()
     return res.status(200).json({
       success:true
     });
@@ -37,6 +39,12 @@ usersRouter.post('/signup', async(req, res, next) => {
 
 usersRouter.get('/auth/google', passport.authenticate('google'))
 usersRouter.get('/auth/google/callback', passport.authenticate('google',{
+  successReturnToOrRedirect:'/',
+  failureRedirect:'/login'
+}))
+
+usersRouter.get('/auth/kakao', passport.authenticate('kakao'))
+usersRouter.get('/auth/kakao/callback', passport.authenticate('kakao',{
   successReturnToOrRedirect:'/',
   failureRedirect:'/login'
 }))
