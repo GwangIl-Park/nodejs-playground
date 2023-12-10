@@ -28,11 +28,9 @@ usersRouter.post('/signup', async(req, res, next) => {
   const user = new User(req.body);
   try {
     await user.save();
-    sendMail()
-    return res.status(200).json({
-      success:true
-    });
+    res.redirect('/login');
   } catch(err) {
+    console.log(err)
     return next(err)
   }
 });
@@ -48,3 +46,5 @@ usersRouter.get('/auth/kakao/callback', passport.authenticate('kakao',{
   successReturnToOrRedirect:'/',
   failureRedirect:'/login'
 }))
+
+module.exports = usersRouter;
