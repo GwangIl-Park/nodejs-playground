@@ -2,8 +2,9 @@ const cookieSession = require('cookie-session')
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
-const User = require('./models/users.model');
 const passport = require('passport');
+const mainRouter = require('./routes/main.router');
+const usersRouter = require('./routes/users.router')
 require('dotenv').config();
 
 const app = express();
@@ -49,49 +50,5 @@ app.use('/static', express.static(path.join(__dirname, 'public')));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-app.get('/login', checkNotAuthenticated, (req, res) => {
-  res.render('login');
-});
-
-app.post('/login', (req, res, next) => {
-  passport.authenticate("local", (err, user, info)=>{
-    if(err) return next(err);
-
-    if(!user) return res.json({msg:info})
-
-    req.logIn(user, (err)=>{
-      if(err) return next(err);
-      res.redirect('/');
-    })
-  })(req,res,next)
-});
-
-app.get('/signup', checkNotAuthenticated, (req, res) => {
-  res.render('signup');
-});
-
-app.get('/', checkAuthenticated, (req,res)=>{
-  res.render('./views')
-})
-
-app.post('/logout', (req, res, next) => {
-  req.logOut((err) => {
-    if(err) return next(err);
-    res.redirect('/login')
-  })
-})
-
-app.post('/signup', async(req, res, next) => {
-  const user = new User(req.body);
-  try {
-    await user.save();
-    return res.status(200).json({
-      success:true
-    });
-  } catch(err) {
-    return next(err)
-  }
-});
-app.listen(5000, () => {
-  console.log('server listening');
-});
+app.use('/',mainRouter)
+app.use('/auth',usersRouter)
