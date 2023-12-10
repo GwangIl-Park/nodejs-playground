@@ -35,14 +35,14 @@ usersRouter.post('/signup', async(req, res, next) => {
   }
 });
 
-usersRouter.get('/auth/google', passport.authenticate('google'))
-usersRouter.get('/auth/google/callback', passport.authenticate('google',{
+usersRouter.get('/google', passport.authenticate('google'))
+usersRouter.get('/google/callback', passport.authenticate('google',{
   successReturnToOrRedirect:'/',
   failureRedirect:'/login'
 }))
 
-usersRouter.get('/auth/kakao', passport.authenticate('kakao'))
-usersRouter.get('/auth/kakao/callback', passport.authenticate('kakao',{
+usersRouter.get('/kakao', passport.authenticate('kakao'))
+usersRouter.get('/kakao/callback', passport.authenticate('kakao',{
   successReturnToOrRedirect:'/',
   failureRedirect:'/login'
 }))
