@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const {Schema} = require('mongoose');
+const bcrypt = require('bcryptjs');
 
 const userSchema = new Schema({
   email:String,
@@ -9,8 +10,11 @@ const userSchema = new Schema({
   kakaoId:String
 });
 
-userSchema.methods.verifyPassword = function(password) {
-  return password === this.password;
+userSchema.methods.verifyPassword = function(plainPassword, cb) {
+  bcrypt.compare(plainPassword, this.password, function (err, isMatch) {
+    if (err) return cb(err);
+    cb(null, isMatch);
+  })
 }
 
 const userModel = mongoose.model('user', userSchema);
