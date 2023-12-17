@@ -17,6 +17,11 @@ userSchema.methods.verifyPassword = function(plainPassword, cb) {
   })
 }
 
+userSchema.pre('save', async function(){
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+})
+
 const userModel = mongoose.model('user', userSchema);
 
 module.exports = userModel;
