@@ -1,18 +1,10 @@
 const express = require('express');
-const path = require('path');
-
-require('dotenv').config()
-require('./loader');
+const setRouter = require("./routes");
 
 const app = express();
 
-app.set('view engine', 'ejs');
-app.use(express.static(path.join(__dirname, 'views')));
+setRouter(app);
 
-app.get('/auth/login', (req, res, next) => {
-  res.render('auth/login');
-});
-
-app.listen(5151, () => {
+app.listen('5001', ()=>{
   console.log('server start');
-});
+})
