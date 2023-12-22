@@ -21,7 +21,30 @@ const schema = mongoose.Schema({
     unique: true,
     sparse: true,
   },
-});
+  username: {
+    type: String,
+    required:true,
+    trim:true
+  },
+  firstName: {
+    type: String,
+    default: 'First Name'
+  },
+  lastName: {
+    type: String,
+    default: 'Last Name'
+  },
+  bio: {
+    type: String,
+    default: 'No Data'
+  },
+  contact: {
+    type: Number,
+    default: '01012345678'
+  },
+  friends: [{type:String}],
+  friendRequest: [{type:String}]
+}, {timestamps:true});
 
 schema.methods.verifyPassword = function(plainPassword, cb) {
   bcrypt.compare(plainPassword, this.password, function (err, isMatch) {
